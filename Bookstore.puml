@@ -1,0 +1,52 @@
+@startuml
+
+Actor Administrator
+Actor User
+Participant UI
+Participant System
+Participant Cart
+Participant Menu
+Participant Payment
+Participant Gateway
+
+=== User Login ==
+User -> UI : Login
+UI -> System : GET/Authentication Token
+System -> UI : 200
+
+=== Browse the Store ==
+UI -> Menu : GET/books
+Menu -> UI : 200
+
+=== Add to Cart ==
+User -> UI : Add to cart
+UI -> Cart : POST/cart:id/book
+Cart -> Menu : Get/book:id
+Menu -> Cart : 200
+Cart -> UI : 201
+
+=== Checkout and Pay ==
+User -> UI : Checkout and Payment
+UI -> Payment : POST/payment
+Payment -> Gateway : POST/payment
+Gateway -> Payment : 200
+Payment -> Gateway : PUT/payment:id
+Gateway -> Payment : 204 no content
+Payment -> UI : 201
+
+=== User Logout ==
+User -> UI : Logout
+UI -> System : Delete/userSession
+System -> UI : 204 no content
+
+=== Admin Add Book ==
+Administrator -> UI : Add Book
+UI -> Menu : POST/book:id
+Menu -> UI : 204 no content
+
+=== Admin Remove Book ==
+Administrator -> UI : Remove Book
+UI -> Menu : Delete/book:id
+Menu -> UI : 204 no content
+
+@enduml
