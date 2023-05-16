@@ -1,0 +1,79 @@
+@startuml
+
+Actor Administrator
+Actor User
+Participant UI
+Participant System
+Participant List
+Participant Reservation
+Participant Payment
+Participant Gateway
+
+=== User Login ==
+User -> UI : Login
+UI -> System : GET/Authentication Token
+System -> UI : 200
+
+=== Home Page ==
+UI -> List : GET/ movies
+List -> UI : 200
+
+=== Search Movies ==
+User -> UI : Search movie by title
+UI -> List : GET/movie/:title
+List -> UI : 200
+
+=== Select Movie ==
+User -> UI : Select a movie and view details
+UI -> List : GET/movie:id
+List -> UI : 200 display movie details and available showtime
+
+=== Select Showtime ==
+User -> UI : Selects a showtime
+UI -> List : GET/movie:id/showtime:id
+List -> UI : 200 
+
+=== Select Seat ==
+User -> UI : Select available seat
+UI -> List : GET/movie:id/showtime:id/seat:id
+Lsit -> UI : 200
+
+=== Confirm Booking ==
+User -> UI : Confirm Booking
+UI -> Reservation : POST/reservation:id
+Reservation -> UI : 200
+
+=== Checkout and Pay ==
+User -> UI : Checkout and Payment
+UI -> Payment : POST/payment
+Payment -> Gateway : POST/payment
+Gateway -> Payment : 200
+Payment -> Gateway : PUT/payment:id
+Gateway -> Payment : 204 no content
+Payment -> UI : 201
+
+=== User Logout ==
+User -> UI : Logout
+UI -> System : Delete/userSession
+System -> UI : 204 no content
+
+=== Admin Add Movie ==
+Administrator -> UI : Add Movie
+UI -> Menu : POST/movie:id
+Menu -> UI : 204 no content
+
+=== Admin Remove Movie ==
+Administrator -> UI : Remove Movie
+UI -> Menu : Delete/movie:id
+Menu -> UI : 204 no content
+
+=== Admin Manage Showtime ==
+Administrator -> UI : Select movie
+UI -> List : GET/movie:id
+List -> UI : 200 Display Movie
+
+Administrator -> UI : Manage movie showtime
+UI -> List : PUT/movie:id/showtime:id
+List -> UI : 204 no content
+
+@enduml
